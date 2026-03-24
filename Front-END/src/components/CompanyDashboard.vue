@@ -141,7 +141,7 @@ const buscarVagas = async () => {
     console.log("Iniciando busca para empresa ID:", user.id)
 
     // Chamada para a rota específica de empresa que criamos no Node
-    const response = await axios.get(`http://localhost:3000/api/vagas/empresa/${user.id}`)
+    const response = await axios.get(`https://conectatalentos-production.up.railway.app/api/vagas/empresa/${user.id}`)
     vagas.value = response.data
   } catch (error) {
     console.error("Erro ao carregar vagas:", error.response?.data || error.message)
@@ -171,7 +171,7 @@ const cadastrarVaga = async () => {
     const user = JSON.parse(userStr)
     
     // Envia os dados e o ID da empresa logada
-    await axios.post('http://localhost:3000/api/vagas', {
+    await axios.post('https://conectatalentos-production.up.railway.app/api/vagas', {
       ...formVaga.value,
       empresa_id: user.id
     })

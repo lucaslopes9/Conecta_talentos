@@ -22,7 +22,7 @@ const realizarLogin = async () => {
 
   try {
     // Chamada para o seu backend Node.js
-    const response = await axios.post('http://localhost:3000/api/login', {
+    const response = await axios.post('https://conectatalentos-production.up.railway.app/api/login', {
       email: email.value,
       senha: senha.value
     })

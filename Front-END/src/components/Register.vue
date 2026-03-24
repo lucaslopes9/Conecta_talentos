@@ -71,7 +71,7 @@ const handleCadastro = async () => {
   mensagem.value = '';
 
   try {
-    const response = await axios.post('http://localhost:3000/api/cadastro', form);
+    const response = await axios.post('https://conectatalentos-production.up.railway.app/api/cadastro', form);
     mensagem.value = "✅ " + response.data.message;
     statusClasse.value = 'success';
     Object.assign(form, { nome: '', email: '', senha: '', tipo: 'talento' });
