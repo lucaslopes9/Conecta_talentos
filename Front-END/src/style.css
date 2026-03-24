@@ -1,0 +1,123 @@
+/* IMPORTAÇÃO DE FONTES DO GUIA */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap');
+
+:root {
+  /* 2. PALETA DE CORES [cite: 5] */
+  --conecta-blue-dark: #0A192F;   /* Confiança e tecnologia (Principal) [cite: 6] */
+  --conecta-blue-neon: #00F0FF;   /* Inovação e inteligência artificial [cite: 6] */
+  --conecta-orange: #FF6B00;      /* Ação, energia e conversão [cite: 6] */
+  --conecta-white: #FFFFFF;       /* Clareza e legibilidade [cite: 7] */
+  
+  /* 3. TIPOGRAFIA [cite: 8] */
+  --font-heading: 'Montserrat', sans-serif; /* Títulos: Moderna e forte  */
+  --font-body: 'Roboto', sans-serif;        /* Texto: Simples e legível  */
+
+  /* CONFIGURAÇÕES DE LAYOUT */
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--conecta-white);
+  background-color: var(--conecta-blue-dark); /* 4. USO PREFERENCIAL SOBRE FUNDO ESCURO  */
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* ESTILO DE TÍTULOS  */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  color: var(--conecta-white);
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+/* 6. BOTÕES E AÇÕES [cite: 14] */
+
+/* Botão Principal: Laranja para incentivar ação [cite: 15] */
+.btn-primary {
+  background-color: var(--conecta-orange);
+  color: var(--conecta-white);
+  border: none;
+  padding: 0.8em 1.5em;
+  font-size: 1em;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: filter 0.25s, transform 0.1s;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+/* Botão Secundário: Azul Neon [cite: 15] */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--conecta-blue-neon);
+  border: 2px solid var(--conecta-blue-neon);
+  padding: 0.7em 1.4em;
+  font-size: 1em;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--conecta-blue-neon);
+  color: var(--conecta-blue-dark);
+}
+
+/* 5. ESTILO VISUAL (EFEITOS DE LUZ E CONEXÕES) [cite: 12, 13] */
+.tech-container {
+  background: radial-gradient(circle at top right, rgba(0, 240, 255, 0.1), transparent);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(5px); /* Efeito moderno e limpo  */
+}
+
+/* 7. EXPERIÊNCIA DO USUÁRIO [cite: 16] */
+/* Foco em interface simples e rápida [cite: 17] */
+.job-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: border-color 0.3s;
+  border: 1px solid transparent;
+}
+
+.job-card:hover {
+  border-color: var(--conecta-blue-neon);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5em;
+  }
+}
