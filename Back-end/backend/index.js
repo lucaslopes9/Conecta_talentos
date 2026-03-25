@@ -7,7 +7,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: '*', // Permite qualquer site (Vercel, Localhost, etc)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // --- ROTAS DA API ---
