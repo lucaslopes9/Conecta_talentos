@@ -6,12 +6,18 @@ import { useRouter } from 'vue-router'
 // Estados reativos
 const email = ref('')
 const senha = ref('')
-const tipoUsuario = ref('talento') // Controla visualmente as abas
-const mostrarSenha = ref(false)    // Controla a visibilidade da senha
+const tipoUsuario = ref('talento') 
+const mostrarSenha = ref(false)    
 
 const router = useRouter()
 const carregando = ref(false)
 const mensagemErro = ref('')
+
+/**
+ * Pega a URL do Backend da variável de ambiente.
+ * Se estiver rodando local, usa o localhost.
+ */
+const API_URL = import.meta.env.VITE_API_URL || 'https://conectatalentos-production.up.railway.app/api'
 
 /**
  * Função principal de autenticação
@@ -21,8 +27,8 @@ const realizarLogin = async () => {
   mensagemErro.value = ''
 
   try {
-    // Chamada para o seu backend Node.js
-    const response = await axios.post('https://conectatalentos-production.up.railway.app/api/login', {
+    // Chamada dinâmica usando a constante API_URL
+    const response = await axios.post(`${API_URL}/login`, {
       email: email.value,
       senha: senha.value
     })
@@ -33,19 +39,17 @@ const realizarLogin = async () => {
     const user = response.data.user
 
     // REDIRECIONAMENTO DINÂMICO
-    // Identifica se é empresa ou talento com base no banco de dados
     if (user.tipo === 'empresa') {
       router.push('/dashboard-empresa')
     } else if (user.tipo === 'talento') {
       router.push('/dashboard-talento')
     } else {
-      // Fallback para uma rota geral caso o tipo seja indefinido
       router.push('/vagas')
     }
 
   } catch (err) {
-    // Captura erros de credenciais, rede ou mensagens do backend
-    mensagemErro.value = err.response?.data?.error || "E-mail ou senha incorretos. Tente novamente."
+    // Captura erros específicos do backend ou erro de rede
+    mensagemErro.value = err.response?.data?.error || "Erro ao conectar com o servidor."
   } finally {
     carregando.value = false
   }

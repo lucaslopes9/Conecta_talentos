@@ -61,21 +61,32 @@ const form = reactive({
   tipo: 'talento' 
 });
 
-const mostrarSenha = ref(false); // Variável para controlar a visibilidade
+const mostrarSenha = ref(false); 
 const loading = ref(false);
 const mensagem = ref('');
 const statusClasse = ref('');
+
+/**
+ * Pega a URL da variável de ambiente (Vercel) 
+ * ou usa o fallback do Railway com o prefixo /api
+ */
+const API_URL = import.meta.env.VITE_API_URL || 'https://conectatalentos-production.up.railway.app/api';
 
 const handleCadastro = async () => {
   loading.value = true;
   mensagem.value = '';
 
   try {
-    const response = await axios.post('https://conectatalentos-production.up.railway.app/api/cadastro', form);
+    // Agora usa a API_URL dinâmica para bater em /api/cadastro
+    const response = await axios.post(`${API_URL}/cadastro`, form);
+    
     mensagem.value = "✅ " + response.data.message;
     statusClasse.value = 'success';
+    
+    // Limpa o formulário após sucesso
     Object.assign(form, { nome: '', email: '', senha: '', tipo: 'talento' });
   } catch (err) {
+    // Captura o erro vindo do seu Back-end (ex: e-mail duplicado)
     mensagem.value = "❌ " + (err.response?.data?.error || "Erro ao cadastrar");
     statusClasse.value = 'error';
   } finally {
@@ -83,7 +94,6 @@ const handleCadastro = async () => {
   }
 };
 </script>
-
 <style scoped>
 .cadastro-container {
   max-width: 400px;
