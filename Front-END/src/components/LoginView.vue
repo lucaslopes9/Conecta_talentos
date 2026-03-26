@@ -14,8 +14,7 @@ const carregando = ref(false)
 const mensagemErro = ref('')
 
 /**
- * Pega a URL do Backend. 
- * O prefixo /api é adicionado na chamada do axios para bater com o seu index.js
+ * Pega a URL do Backend das variáveis de ambiente ou usa o fallback do Railway.
  */
 const API_URL = import.meta.env.VITE_API_URL || 'https://conectatalentos-production.up.railway.app'
 
@@ -26,12 +25,13 @@ const realizarLogin = async () => {
   carregando.value = true
   mensagemErro.value = ''
 
-  // Ajustei o log para mostrar a URL real que o axios vai usar
-  console.log("🔗 Tentando login em:", `${API_URL}/api/login`);
+  // URL final combinando o domínio + prefixo da rota do seu backend
+  const urlFinal = `${API_URL}/api/login`
+
+  console.log("🔗 Tentando login em:", urlFinal);
 
   try {
-    // Chamada dinâmica usando a constante API_URL + prefixo /api/login
-    const response = await axios.post(`${API_URL}/login`, {
+    const response = await axios.post(urlFinal, {
       email: email.value,
       senha: senha.value
     })
@@ -40,6 +40,7 @@ const realizarLogin = async () => {
     localStorage.setItem('usuario', JSON.stringify(response.data.user))
 
     const user = response.data.user
+    console.log("✅ Login bem-sucedido:", user.nome)
 
     // REDIRECIONAMENTO DINÂMICO
     if (user.tipo === 'empresa') {
@@ -51,8 +52,21 @@ const realizarLogin = async () => {
     }
 
   } catch (err) {
-    // Captura erros específicos do backend (ex: 401 - Senha incorreta)
-    mensagemErro.value = err.response?.data?.error || "Erro ao conectar com o servidor."
+    // Tratamento de erros detalhado
+    if (err.response) {
+      // O servidor respondeu com um erro (401, 404, 500, 503)
+      if (err.response.status === 503) {
+        mensagemErro.value = "O servidor está iniciando no Railway. Aguarde 10 segundos e tente novamente."
+      } else {
+        mensagemErro.value = err.response.data.error || "E-mail ou senha incorretos."
+      }
+    } else if (err.request) {
+      // A requisição foi feita mas não houve resposta (Erro de rede/CORS)
+      mensagemErro.value = "Sem resposta do servidor. Verifique sua conexão ou o status do Railway."
+    } else {
+      mensagemErro.value = "Erro ao processar login."
+    }
+    
     console.error("❌ Erro de Login:", err.response?.data || err.message)
   } finally {
     carregando.value = false
@@ -120,7 +134,6 @@ const realizarLogin = async () => {
 </template>
 
 <style scoped>
-/* Estilos mantidos conforme seu padrão Neon */
 .login-container {
   display: flex;
   justify-content: center;
@@ -179,6 +192,12 @@ h2 span {
 
 .password-wrapper input {
   width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  color: white;
+  outline: none;
   padding-right: 45px;
 }
 
@@ -196,16 +215,6 @@ label {
   margin-bottom: 8px;
   font-size: 0.9rem;
   color: #ccc;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  color: white;
-  outline: none;
 }
 
 input:focus {
