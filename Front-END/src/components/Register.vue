@@ -79,7 +79,7 @@ const handleCadastro = async () => {
   try {
     // Chamada corrigida: Adicionado /api/cadastro para coincidir com o backend
     // Enviando o objeto 'form' completo
-    const response = await axios.post(`${API_URL}/api/cadastro`, form);
+    const response = await axios.post(`${API_URL}/cadastro`, form);
     
     mensagem.value = "✅ " + response.data.message;
     statusClasse.value = 'success';

@@ -31,7 +31,7 @@ const realizarLogin = async () => {
 
   try {
     // Chamada dinâmica usando a constante API_URL + prefixo /api/login
-    const response = await axios.post(`${API_URL}/api/login`, {
+    const response = await axios.post(`${API_URL}/login`, {
       email: email.value,
       senha: senha.value
     })
