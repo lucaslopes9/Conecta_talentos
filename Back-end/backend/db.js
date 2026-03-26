@@ -6,12 +6,12 @@ require('dotenv').config();
  * No Railway, ele usará a DATABASE_URL automática.
  * No seu Linux (Local), ele usará os dados do XAMPP.
  */
-const pool = mysql.createPool(process.env.DATABASE_URL || {
-  host: '127.0.0.1',
-  user: 'root',
-  password: '',
-  database: 'conecta_talent',
-  port: 3306,
+const pool = mysql.createPool(process.env.DATABASE_URL || process.env.MYSQL_URL || {
+  host: process.env.MYSQLHOST || '127.0.0.1',
+  user: process.env.MYSQLUSER || 'root',
+  password: process.env.MYSQLPASSWORD || '',
+  database: process.env.MYSQLDATABASE || 'conecta_talent',
+  port: process.env.MYSQLPORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
