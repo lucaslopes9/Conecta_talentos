@@ -68,17 +68,18 @@ const statusClasse = ref('');
 
 /**
  * Pega a URL da variável de ambiente (Vercel) 
- * ou usa o fallback do Railway com o prefixo /api
+ * O prefixo /api é adicionado na chamada do axios para bater com o index.js
  */
-const API_URL = import.meta.env.VITE_API_URL || 'https://conectatalentos-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://conectatalentos-production.up.railway.app';
 
 const handleCadastro = async () => {
   loading.value = true;
   mensagem.value = '';
 
   try {
-    // Agora usa a API_URL dinâmica para bater em /api/cadastro
-    const response = await axios.post(`${API_URL}/cadastro`, form);
+    // Chamada corrigida: Adicionado /api/cadastro para coincidir com o backend
+    // Enviando o objeto 'form' completo
+    const response = await axios.post(`${API_URL}/api/cadastro`, form);
     
     mensagem.value = "✅ " + response.data.message;
     statusClasse.value = 'success';
@@ -86,14 +87,15 @@ const handleCadastro = async () => {
     // Limpa o formulário após sucesso
     Object.assign(form, { nome: '', email: '', senha: '', tipo: 'talento' });
   } catch (err) {
-    // Captura o erro vindo do seu Back-end (ex: e-mail duplicado)
-    mensagem.value = "❌ " + (err.response?.data?.error || "Erro ao cadastrar");
+    // Captura o erro vindo do seu Back-end (ex: e-mail duplicado ou erro de servidor)
+    mensagem.value = "❌ " + (err.response?.data?.error || "Erro ao conectar com o servidor.");
     statusClasse.value = 'error';
   } finally {
     loading.value = false;
   }
 };
 </script>
+
 <style scoped>
 .cadastro-container {
   max-width: 400px;
@@ -107,7 +109,6 @@ const handleCadastro = async () => {
 
 .field { margin-bottom: 15px; display: flex; flex-direction: column; }
 
-/* Wrapper para posicionar o olhinho dentro do input */
 .password-wrapper {
   position: relative;
   display: flex;
@@ -116,14 +117,12 @@ const handleCadastro = async () => {
 
 .password-wrapper input {
   width: 100%;
-  padding-right: 45px; /* Espaço para o ícone não sobrepor o texto */
+  padding-right: 45px;
 }
 
 .toggle-password {
   position: absolute;
   right: 12px;
-  top: 50%;
-  transform: translateY(-20%); /* Ajuste fino para centralizar o emoji */
   cursor: pointer;
   font-size: 1.2rem;
   user-select: none;
@@ -152,7 +151,15 @@ button {
   margin-top: 10px;
 }
 
-button:disabled { background: #555; }
+button:hover {
+  background: #00d8e6;
+}
+
+button:disabled { 
+  background: #555; 
+  cursor: not-allowed;
+}
+
 .success { color: #42b983; margin-top: 10px; font-weight: bold; }
 .error { color: #ff5252; margin-top: 10px; font-weight: bold; }
 </style>

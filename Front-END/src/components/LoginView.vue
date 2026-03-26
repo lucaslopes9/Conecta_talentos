@@ -14,10 +14,10 @@ const carregando = ref(false)
 const mensagemErro = ref('')
 
 /**
- * Pega a URL do Backend da variável de ambiente.
- * Se estiver rodando local, usa o localhost.
+ * Pega a URL do Backend. 
+ * O prefixo /api é adicionado na chamada do axios para bater com o seu index.js
  */
-const API_URL = import.meta.env.VITE_API_URL || 'https://conectatalentos-production.up.railway.app/api'
+const API_URL = import.meta.env.VITE_API_URL || 'https://conectatalentos-production.up.railway.app'
 
 /**
  * Função principal de autenticação
@@ -26,11 +26,12 @@ const realizarLogin = async () => {
   carregando.value = true
   mensagemErro.value = ''
 
-  console.log("🔗 URL sendo acessada:", `${API_URL}/login`);
+  // Ajustei o log para mostrar a URL real que o axios vai usar
+  console.log("🔗 Tentando login em:", `${API_URL}/api/login`);
 
   try {
-    // Chamada dinâmica usando a constante API_URL
-    const response = await axios.post(`${API_URL}/login`, {
+    // Chamada dinâmica usando a constante API_URL + prefixo /api/login
+    const response = await axios.post(`${API_URL}/api/login`, {
       email: email.value,
       senha: senha.value
     })
@@ -50,8 +51,9 @@ const realizarLogin = async () => {
     }
 
   } catch (err) {
-    // Captura erros específicos do backend ou erro de rede
+    // Captura erros específicos do backend (ex: 401 - Senha incorreta)
     mensagemErro.value = err.response?.data?.error || "Erro ao conectar com o servidor."
+    console.error("❌ Erro de Login:", err.response?.data || err.message)
   } finally {
     carregando.value = false
   }
@@ -118,12 +120,7 @@ const realizarLogin = async () => {
 </template>
 
 <style scoped>
-/* Variáveis de cores baseadas no seu padrão Dark/Neon */
-:root {
-  --conecta-blue-neon: #00f0ff;
-  --conecta-blue-dark: #0b0b0b;
-}
-
+/* Estilos mantidos conforme seu padrão Neon */
 .login-container {
   display: flex;
   justify-content: center;
@@ -143,7 +140,7 @@ const realizarLogin = async () => {
 }
 
 h2 span {
-  color: #00f0ff; /* Cor Neon */
+  color: #00f0ff;
 }
 
 .tabs {
@@ -181,6 +178,7 @@ h2 span {
 }
 
 .password-wrapper input {
+  width: 100%;
   padding-right: 45px;
 }
 
